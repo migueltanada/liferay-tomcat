@@ -1,0 +1,44 @@
+<Context crossContext="true" path="">
+
+	<!-- JAAS -->
+
+	<!--<Realm
+		className="org.apache.catalina.realm.JAASRealm"
+		appName="PortalRealm"
+		userClassNames="com.liferay.portal.kernel.security.jaas.PortalPrincipal"
+		roleClassNames="com.liferay.portal.kernel.security.jaas.PortalRole"
+	/>-->
+
+	<!--
+	Uncomment the following to disable persistent sessions across reboots.
+	-->
+
+	<!--<Manager pathname="" />-->
+
+	<!--
+	Uncomment the following to not use sessions. See the property
+	"session.disabled" in portal.properties.
+	-->
+
+	<!--<Manager className="com.liferay.support.tomcat.session.SessionLessManagerBase" />-->
+
+	<Resources>
+		<PreResources
+			base="${catalina.base}/lib/ext/portal"
+			className="com.liferay.support.tomcat.webresources.ExtResourceSet"
+			webAppMount="/WEB-INF/lib"
+		/>
+		<Resource
+			name="####TOKEN_dbconf_name####"
+			auth="####TOKEN_dbconf_auth####"
+			type="####TOKEN_dbconf_type####"
+			driverClassName="####TOKEN_dbconf_driverClassName####"
+			url="####TOKEN_dbconf_url####"
+			username="####TOKEN_dbconf_username####"
+			password="####TOKEN_dbconf_password####"
+			maxActive="####TOKEN_dbconf_maxActive####"
+			maxIdle="####TOKEN_dbconf_maxIdle####"
+			maxWait="####TOKEN_dbconf_maxWait####"
+		/>
+	</Resources>
+</Context>
