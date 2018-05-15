@@ -35,6 +35,9 @@ ENV TOKEN_dbconf_name="jdbc/LiferayPool" \
     TOKEN_es_transportAddresses_port="9300" \
     TOKEN_es_logExceptionsOnly="false"
 
+ENV REMOTE_ES_ENABLE="false" \ 
+    REMOTE_DB_ENABLE="false"
+
 	
 RUN yum install -y unzip && \
     tar xf /tmp/jdk-8u172-linux-x64.tar.gz -C /opt && \

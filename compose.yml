@@ -4,6 +4,10 @@ liferay:
   net: testnet
   ports:
   - 2009:8080
+  environment:
+    REMOTE_DB_ENABLE: "true"
+    REMOTE_ES_ENABLE: "true"
+
 
 liferay-mysql:
   container_name: liferay-mysql
@@ -17,3 +21,14 @@ liferay-mysql:
     MYSQL_USER: liferay
     MYSQL_PASSWORD: liferay
     MYSQL_DATABASE: lportal
+
+elasticsearch:
+  container_name: elasticsearch
+  restart: always
+  image: elasticsearch:2.1.1
+  net: testnet
+  command: elasticsearch -Des.network.host=0.0.0.0
+  ports:
+    - "9200:9200"
+  volumes:
+    - elasticsearch_data:/usr/share/elasticsearch/data
