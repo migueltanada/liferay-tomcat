@@ -10,7 +10,6 @@ RUN  mkdir -p /templates
 COPY Resources/conf/. /templates/
 COPY Resources/installers/jdk-8u172-linux-x64.tar.gz /tmp
 COPY Resources/installers/liferay-dxp-digital-enterprise-7.0-sp7.zip /tmp
-COPY Resources/portal-setup-wizard.properties /tmp
 
 ENV JAVA_HOME=/opt/jdk1.8.0_172 \
     LIFERAY_HOME=/opt/liferay
@@ -56,7 +55,6 @@ RUN yum install -y unzip && \
     mv /tmp/liferay-dxp-digital-enterprise-7.0-sp7 ${LIFERAY_HOME} && \
     groupadd liferay && \
     useradd -s /bin/nologin -g liferay -d ${LIFERAY_HOME} liferay && \
-    cp /tmp/portal-setup-wizard.properties ${LIFERAY_HOME} && \
     chown -R liferay:liferay ${LIFERAY_HOME} 
 
 

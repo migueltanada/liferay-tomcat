@@ -7,6 +7,8 @@ liferay:
   environment:
     REMOTE_DB_ENABLE: "true"
     REMOTE_ES_ENABLE: "false"
+    INITIAL_SETUP_ENABLE: "true"
+    PORTAL_EXT_SETUP_ENABLE: "true"
 
 
 liferay-mysql:
