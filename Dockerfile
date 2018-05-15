@@ -7,11 +7,10 @@ LABEL JAVA_INSTALLER=jdk-8u172-linux-x64.tar.gz \
       LIFERAY_BUNDLE=liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip
 
 RUN  mkdir -p /templates
-COPY Resources/conf/ROOT.xml.template /templates
-COPY Resources/conf/com.liferay.portal.search.elasticsearch.configuration.ElasticsearchConfiguration.config.template /templates
+COPY Resources/conf/. /templates/
 COPY Resources/installers/jdk-8u172-linux-x64.tar.gz /tmp
 COPY Resources/installers/liferay-dxp-digital-enterprise-7.0-sp7.zip /tmp
-
+COPY Resources/portal-setup-wizard.properties /tmp
 
 ENV JAVA_HOME=/opt/jdk1.8.0_172 \
     LIFERAY_HOME=/opt/liferay
@@ -31,12 +30,22 @@ ENV TOKEN_dbconf_name="jdbc/LiferayPool" \
     TOKEN_dbconf_maxIdle="30" \ 
     TOKEN_dbconf_maxWait="10000" \
     TOKEN_es_operationMode="REMOTE" \
-    TOKEN_es_transportAddresses_ip="liferay-es" \
-    TOKEN_es_transportAddresses_port="9300" \
-    TOKEN_es_logExceptionsOnly="false"
+    TOKEN_es_transportAddresses_ip="elasticsearch" \
+    TOKEN_es_transportAddresses_port="9200" \
+    TOKEN_es_logExceptionsOnly="false" \
+    TOKEN_setup_admin.email.from.address="test@liferay.com" \
+    TOKEN_setup_admin.email.from.name="Test Test" \
+    TOKEN_setup_company.default.locale="en_US" \
+    TOKEN_setup_company.default.web.id="liferay.com" \
+    TOKEN_setup_default.admin.email.address.prefix="test" \
+    TOKEN_setup_liferay.home="/opt/liferay" \
+    TOKEN_setup_setup.wizard.enabled="false" \
+    TOKEN_portal_jdbc.default.jndi.name="jdbc/LiferayPool"
 
 ENV REMOTE_ES_ENABLE="false" \ 
-    REMOTE_DB_ENABLE="false"
+    REMOTE_DB_ENABLE="false" \
+    INITIAL_SETUP_ENABLE="false" \
+    PORTAL_EXT_SETUP_ENABLE="false"
 
 	
 RUN yum install -y unzip && \
@@ -47,12 +56,16 @@ RUN yum install -y unzip && \
     mv /tmp/liferay-dxp-digital-enterprise-7.0-sp7 ${LIFERAY_HOME} && \
     groupadd liferay && \
     useradd -s /bin/nologin -g liferay -d ${LIFERAY_HOME} liferay && \
-    chown -R liferay:liferay ${LIFERAY_HOME}
+    cp /tmp/portal-setup-wizard.properties ${LIFERAY_HOME} && \
+    chown -R liferay:liferay ${LIFERAY_HOME} 
+
+
 
 VOLUME ["/opt/liferay"]
 
 COPY Resources/scripts/entrypoint.sh /opt
 COPY Resources/scripts/wait-for-it.sh /opt
+
 
 RUN  chmod +x /opt/entrypoint.sh && \
      chmod +x /opt/wait-for-it.sh && \
@@ -64,3 +77,5 @@ USER liferay
 WORKDIR ${LIFERAY_HOME}
 
 ENTRYPOINT ["/opt/entrypoint.sh"]
+
+

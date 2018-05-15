@@ -6,7 +6,7 @@ liferay:
   - 2009:8080
   environment:
     REMOTE_DB_ENABLE: "true"
-    REMOTE_ES_ENABLE: "true"
+    REMOTE_ES_ENABLE: "false"
 
 
 liferay-mysql:
