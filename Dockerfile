@@ -6,16 +6,18 @@ LABEL JAVA_INSTALLER=jdk-8u172-linux-x64.tar.gz \
       TOMCAT_VERSION=8.0.32 \
       LIFERAY_BUNDLE=liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip
 
+# Copy Installers
 COPY Resources/installers/jdk-8u172-linux-x64.tar.gz /tmp
 COPY Resources/installers/liferay-dxp-digital-enterprise-7.0-sp7.zip /tmp
 
+# Environment for java, liferay, tomcat and binaries
 ENV JAVA_HOME=/opt/jdk1.8.0_172 \
     LIFERAY_HOME=/opt/liferay
 ENV CATALINA_HOME=${LIFERAY_HOME}/tomcat-8.0.32 \
     CATALINA_BASE=${LIFERAY_HOME}/tomcat-8.0.32 
-
 ENV PATH=${PATH}:${JAVA_HOME}/bin:${CATALINA_HOME}/bin:${CATALINA_HOME}/scripts
 
+# Install Liferay
 RUN yum install -y unzip && \
     tar xf /tmp/jdk-8u172-linux-x64.tar.gz -C /opt && \
     rm -rf /tmp/jdk-8u172-linux-x64.tar.gz && \
@@ -26,9 +28,11 @@ RUN yum install -y unzip && \
     useradd -s /bin/nologin -g liferay -d ${LIFERAY_HOME} liferay && \
     chown -R liferay:liferay ${LIFERAY_HOME} 
 
+# Templates
 RUN  mkdir -p /templates
 COPY Resources/conf/. /templates/
 
+# Tokens
 ENV TOKEN_dbconf_name="jdbc/LiferayPool" \
     TOKEN_dbconf_auth="Container" \
     TOKEN_dbconf_type="javax.sql.DataSource" \
@@ -51,26 +55,34 @@ ENV TOKEN_dbconf_name="jdbc/LiferayPool" \
     TOKEN_setup_liferay_home="/opt/liferay" \
     TOKEN_setup_setup_wizard_enabled="false" 
 
-
+# Enable templating
 ENV REMOTE_ES_ENABLE="false" \ 
     REMOTE_DB_ENABLE="false" \
     INITIAL_SETUP_ENABLE="false" \
     PORTAL_EXT_SETUP_ENABLE="false"
 
-#VOLUME ["/opt/liferay"]
+VOLUME ["/opt/liferay"]
 
+# Add Scripts
 COPY Resources/scripts/entrypoint.sh /opt
 COPY Resources/scripts/wait-for-it.sh /opt
-COPY Resources/mysql.jar ${CATALINA_HOME}/lib/ext
+
+RUN chmod +x /opt/entrypoint.sh && \
+    chmod +x /opt/wait-for-it.sh && \
+    chown -R liferay:liferay /opt/entrypoint.sh && \
+    chown -R liferay:liferay /opt/wait-for-it.sh
+    
+
+# Mysql.jar    
+COPY Resources/mysql.jar /tmp
+
+RUN mkdir -p /opt/liferay/tomcat-8.0.32/lib/ext/ && \
+    cp /tmp/mysql.jar ${CATALINA_HOME}/lib/ext/ && \
+    chmod +x ${CATALINA_HOME}/lib/ext/mysql.jar && \
+    chown -R liferay:liferay ${CATALINA_HOME}/lib/ext/mysql.jar
 
 
-RUN  chmod +x /opt/entrypoint.sh && \
-     chmod +x /opt/wait-for-it.sh && \
-     chmod +x ${CATALINA_HOME}/lib/ext/mysql.jar && \
-     chown -R liferay:liferay /opt/entrypoint.sh && \
-     chown -R liferay:liferay /opt/wait-for-it.sh && \
-     chown -R liferay:liferay ${CATALINA_HOME}/common/lib/ext/mysql.jar
-
+# Switch to liferay user
 USER liferay
 
 WORKDIR ${LIFERAY_HOME}
