@@ -1,1 +1,1 @@
-jdbc.default.jndi.name="###TOKEN_portal_jdbc.default.jndi.name###"
+jdbc.default.jndi.name=####TOKEN_portal_jdbc_default_jndi_name####

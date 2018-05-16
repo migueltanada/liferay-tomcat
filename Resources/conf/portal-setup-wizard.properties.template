@@ -1,7 +1,7 @@
-admin.email.from.address="###TOKEN_setup_admin.email.from.address###"
-admin.email.from.name="###TOKEN_setup_admin.email.from.name###"
-company.default.locale="###TOKEN_setup_company.default.locale###"
-company.default.web.id="###TOKEN_setup_company.default.web.id###"
-default.admin.email.address.prefix="###TOKEN_setup_default.admin.email.address.prefix###"
-liferay.home="###TOKEN_setup_liferay.home###"
-setup.wizard.enabled="###TOKEN_setup_setup.wizard.enabled###"
+admin.email.from.address=####TOKEN_setup_admin_email_from_address####
+admin.email.from.name=####TOKEN_setup_admin_email_from_name####
+company.default.locale=####TOKEN_setup_company_default_locale####
+company.default.web.id=####TOKEN_setup_company_default_web_id####
+default.admin.email.address.prefix=####TOKEN_setup_default_admin_email_address_prefix####
+liferay.home=####TOKEN_setup_liferay_home####
+setup.wizard.enabled=####TOKEN_setup_setup_wizard_enabled####

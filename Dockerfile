@@ -6,8 +6,6 @@ LABEL JAVA_INSTALLER=jdk-8u172-linux-x64.tar.gz \
       TOMCAT_VERSION=8.0.32 \
       LIFERAY_BUNDLE=liferay-dxp-digital-enterprise-tomcat-7.0-sp7-20180307180151313.zip
 
-RUN  mkdir -p /templates
-COPY Resources/conf/. /templates/
 COPY Resources/installers/jdk-8u172-linux-x64.tar.gz /tmp
 COPY Resources/installers/liferay-dxp-digital-enterprise-7.0-sp7.zip /tmp
 
@@ -17,6 +15,19 @@ ENV CATALINA_HOME=${LIFERAY_HOME}/tomcat-8.0.32 \
     CATALINA_BASE=${LIFERAY_HOME}/tomcat-8.0.32 
 
 ENV PATH=${PATH}:${JAVA_HOME}/bin:${CATALINA_HOME}/bin:${CATALINA_HOME}/scripts
+
+RUN yum install -y unzip && \
+    tar xf /tmp/jdk-8u172-linux-x64.tar.gz -C /opt && \
+    rm -rf /tmp/jdk-8u172-linux-x64.tar.gz && \
+    unzip /tmp/liferay-dxp-digital-enterprise-7.0-sp7.zip -d /tmp && \
+    rm -rf /tmp/liferay-dxp-digital-enterprise-7.0-sp7.zip && \
+    mv /tmp/liferay-dxp-digital-enterprise-7.0-sp7 ${LIFERAY_HOME} && \
+    groupadd liferay && \
+    useradd -s /bin/nologin -g liferay -d ${LIFERAY_HOME} liferay && \
+    chown -R liferay:liferay ${LIFERAY_HOME} 
+
+RUN  mkdir -p /templates
+COPY Resources/conf/. /templates/
 
 ENV TOKEN_dbconf_name="jdbc/LiferayPool" \
     TOKEN_dbconf_auth="Container" \
@@ -32,32 +43,20 @@ ENV TOKEN_dbconf_name="jdbc/LiferayPool" \
     TOKEN_es_transportAddresses_ip="elasticsearch" \
     TOKEN_es_transportAddresses_port="9200" \
     TOKEN_es_logExceptionsOnly="false" \
-    TOKEN_setup_admin.email.from.address="test@liferay.com" \
-    TOKEN_setup_admin.email.from.name="Test Test" \
-    TOKEN_setup_company.default.locale="en_US" \
-    TOKEN_setup_company.default.web.id="liferay.com" \
-    TOKEN_setup_default.admin.email.address.prefix="test" \
-    TOKEN_setup_liferay.home="/opt/liferay" \
-    TOKEN_setup_setup.wizard.enabled="false" \
-    TOKEN_portal_jdbc.default.jndi.name="jdbc/LiferayPool"
+    TOKEN_setup_admin_email_from_address="test@liferay.com" \
+    TOKEN_setup_admin_email_from_name="Test Test" \
+    TOKEN_setup_company_default_locale="en_US" \
+    TOKEN_setup_company_default_web_id="liferay.com" \
+    TOKEN_setup_default_admin_email_address_prefix="test" \
+    TOKEN_setup_liferay_home="/opt/liferay" \
+    TOKEN_setup_setup_wizard_enabled="false" \
+    TOKEN_portal_jdbc_default_jndi_name="jdbc/LiferayPool"
+
 
 ENV REMOTE_ES_ENABLE="false" \ 
     REMOTE_DB_ENABLE="false" \
     INITIAL_SETUP_ENABLE="false" \
     PORTAL_EXT_SETUP_ENABLE="false"
-
-	
-RUN yum install -y unzip && \
-    tar xf /tmp/jdk-8u172-linux-x64.tar.gz -C /opt && \
-    rm -rf /tmp/jdk-8u172-linux-x64.tar.gz && \
-    unzip /tmp/liferay-dxp-digital-enterprise-7.0-sp7.zip -d /tmp && \
-    rm -rf /tmp/liferay-dxp-digital-enterprise-7.0-sp7.zip && \
-    mv /tmp/liferay-dxp-digital-enterprise-7.0-sp7 ${LIFERAY_HOME} && \
-    groupadd liferay && \
-    useradd -s /bin/nologin -g liferay -d ${LIFERAY_HOME} liferay && \
-    chown -R liferay:liferay ${LIFERAY_HOME} 
-
-
 
 VOLUME ["/opt/liferay"]
 
