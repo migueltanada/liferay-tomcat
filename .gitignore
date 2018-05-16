@@ -25,4 +25,5 @@ pyenv
 Vagrantfile
 Resources/installers/*.zip
 Resources/installers/*.tar.gz
+Resources/*.jar
 activation-key-digitalenterprisedevelopment-7.0-triallicenses.xml

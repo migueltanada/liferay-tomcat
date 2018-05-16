@@ -49,17 +49,35 @@ if [[ ! -f "/opt/vars.lock" ]]; then
     fi
 
     # ROOT.xml setup
-    # if $REMOTE_DB_ENABLE; then    
-    #     TEMPLATE="/templates/ROOT.xml.template"
-    #     FILE="${CATALINA_HOME}/conf/Catalina/localhost/ROOT.xml"
-    #     cp $TEMPLATE $FILE
-    #     declare -a TOKEN_dbconf=$(env | grep ^"TOKEN_dbconf_" | awk -F= '{print $1}')
-    #     for token in ${TOKEN_dbconf[@]}
-    #     do
-    #         replacer
-    #     done
+    if $REMOTE_DB_ENABLE; then    
+        declare -a TOKEN_dbconf=$(env | grep ^"TOKEN_dbconf_" | awk -F= '{print $1}')
 
-    # fi
+        TEMPLATE="/templates/server.xml.template"
+        FILE="${CATALINA_HOME}/conf/server.xml"
+        cp $TEMPLATE $FILE
+        for token in ${TOKEN_dbconf[@]}
+        do
+            replacer
+        done
+
+        TEMPLATE="/templates/context.xml.template"
+        FILE="${CATALINA_HOME}/conf/context.xml"
+        cp $TEMPLATE $FILE
+        for token in ${TOKEN_dbconf[@]}
+        do
+            replacer
+        done
+
+        TEMPLATE="/templates/portal-ext.properties.template"
+        FILE="${LIFERAY_HOME}/portal-ext.properties"
+        cp $TEMPLATE $FILE
+        for token in ${TOKEN_dbconf[@]}
+        do
+            replacer
+        done
+
+
+    fi
 
     # com.liferay.portal.search.elasticsearch.configuration.ElasticsearchConfiguration.config setup
     if $REMOTE_ES_ENABLE; then

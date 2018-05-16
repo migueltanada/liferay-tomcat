@@ -49,8 +49,7 @@ ENV TOKEN_dbconf_name="jdbc/LiferayPool" \
     TOKEN_setup_company_default_web_id="liferay.com" \
     TOKEN_setup_default_admin_email_address_prefix="test" \
     TOKEN_setup_liferay_home="/opt/liferay" \
-    TOKEN_setup_setup_wizard_enabled="false" \
-    TOKEN_portal_jdbc_default_jndi_name="jdbc/LiferayPool"
+    TOKEN_setup_setup_wizard_enabled="false" 
 
 
 ENV REMOTE_ES_ENABLE="false" \ 
@@ -58,16 +57,19 @@ ENV REMOTE_ES_ENABLE="false" \
     INITIAL_SETUP_ENABLE="false" \
     PORTAL_EXT_SETUP_ENABLE="false"
 
-VOLUME ["/opt/liferay"]
+#VOLUME ["/opt/liferay"]
 
 COPY Resources/scripts/entrypoint.sh /opt
 COPY Resources/scripts/wait-for-it.sh /opt
+COPY Resources/mysql.jar ${CATALINA_HOME}/lib/ext
 
 
 RUN  chmod +x /opt/entrypoint.sh && \
      chmod +x /opt/wait-for-it.sh && \
+     chmod +x ${CATALINA_HOME}/lib/ext/mysql.jar && \
      chown -R liferay:liferay /opt/entrypoint.sh && \
-     chown -R liferay:liferay /opt/wait-for-it.sh
+     chown -R liferay:liferay /opt/wait-for-it.sh && \
+     chown -R liferay:liferay ${CATALINA_HOME}/common/lib/ext/mysql.jar
 
 USER liferay
 

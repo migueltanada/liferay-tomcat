@@ -1,1 +1,1 @@
-jdbc.default.jndi.name=####TOKEN_portal_jdbc_default_jndi_name####
+jdbc.default.jndi.name=####TOKEN_dbconf_name####
