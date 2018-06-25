@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Context>
+
+    <WatchedResource>WEB-INF/web.xml</WatchedResource>
+    <WatchedResource>${catalina.base}/conf/web.xml</WatchedResource>
+    <ResourceLink name="####TOKEN_dbconf_name####"
+                  global="####TOKEN_dbconf_name####"/>
+
+</Context>

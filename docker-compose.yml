@@ -1,5 +1,6 @@
 liferay:
-  build: .
+    #  build: .
+  build: build/layer_3_configurations
   container_name: liferay
   net: testnet
   ports:
@@ -24,13 +25,13 @@ liferay-mysql:
     MYSQL_PASSWORD: liferay
     MYSQL_DATABASE: lportal
 
-elasticsearch:
-  container_name: elasticsearch
-  restart: always
-  image: elasticsearch:2.1.1
-  net: testnet
-  command: elasticsearch -Des.network.host=0.0.0.0
-  ports:
-    - "9200:9200"
-  volumes:
-    - elasticsearch_data:/usr/share/elasticsearch/data
+#elasticsearch:
+#  container_name: elasticsearch
+#  restart: always
+  #  image: elasticsearch:2.1.1
+  #  net: testnet
+  #  command: elasticsearch -Des.network.host=0.0.0.0
+  #  ports:
+      #    - "9200:9200"
+      #  volumes:
+      #    - elasticsearch_data:/usr/share/elasticsearch/data
